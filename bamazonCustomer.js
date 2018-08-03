@@ -27,7 +27,23 @@ connection.connect(function(err) {
 function listItems() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    console.log(res);
+
+    console.log(
+      '\n' 
+      + "The Available Products In Inventory Are Listed Below"
+      + '\n' + "---------------------------------------------------------------------"
+      + '\n'
+    );
+
+    for(var i = 0; i < res.length; i++) {
+      console.log(
+     "ID #" + res[i].id + " | " + res[i].product_name + " | " + "Price: $" + res[i].price + " | " + res[i].stock_quantity + " left in stock"
+      + '\n' + "---------------------------------------------------------------------");
+    }
+
+    //commented out code below because the res will just print out the different items in the database as an object
+    // console.log(res);
+    
     connection.end();
   });
 }

@@ -40,7 +40,7 @@ function managerPrompt() {
         } else if(managersChoice.managerOptions === "View Low Inventory") {
             lowInventory();
         } else if(managersChoice.managerOptions === "Add to Inventory") {
-
+            add();
         } else {
 
         }
@@ -113,7 +113,29 @@ function lowInventory() {
 }
 
 function add() {
-    
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "idNumber",
+                message: "What is the ID number of the product that you would like to add inventory to?"
+            },
+            {
+                type: "input",
+                name: "addAmount",
+                message: "How many more would you like to add?"
+            }
+        ]).then(function(answer) { 
+            connection.query("UPDATE products SET ? WHERE ?",
+        [
+            {
+                id: answer.idNumber
+            },
+            {
+                stock_quantity: answer.addAmount
+            }
+        ])
+        })
 }
 
 function addInventoryPrompt() {
@@ -128,6 +150,7 @@ function addInventoryPrompt() {
         ]).then(function(answer) {
             if (answer.addInventory === "Yes") {
                 console.log("adding");
+                add();
             } else {
                 console.log("\n\nSounds good Boss, have a nice day!\n\n");
 

@@ -38,7 +38,7 @@ function managerPrompt() {
         if(managersChoice.managerOptions === "View Products for Sale") {
             listItems();
         } else if(managersChoice.managerOptions === "View Low Inventory") {
-            
+            lowInventory();
         } else if(managersChoice.managerOptions === "Add to Inventory") {
 
         } else {
@@ -87,6 +87,50 @@ function promptQuestion() {
                 managerPrompt();
             } else {
                 console.log("Have a great day Boss!");
+                connection.end();
+            }
+        })
+}
+
+function lowInventory() {
+    connection.query("SELECT * FROM products", function(err, res) {
+
+        console.log("\n============================= LOW INVENTORY =================================\n")
+
+        for(var i = 0; i < res.length; i++) {
+            if(res[i].stock_quantity <= 5) {
+                console.log(
+                    "ID #" + res[i].id + " | " + res[i].product_name + " | " + "Price: $" + res[i].price + " | " + res[i].stock_quantity + " left in stock"
+                )
+            }
+        }
+
+        console.log("\n=============================================================================\n");
+
+        addInventoryPrompt();
+
+    })
+}
+
+function add() {
+    
+}
+
+function addInventoryPrompt() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "addInventory",
+                message: "Would you like to add more to the inventory?",
+                choices: ["Yes", "No"]
+            }
+        ]).then(function(answer) {
+            if (answer.addInventory === "Yes") {
+                console.log("adding");
+            } else {
+                console.log("\n\nSounds good Boss, have a nice day!\n\n");
+
                 connection.end();
             }
         })
